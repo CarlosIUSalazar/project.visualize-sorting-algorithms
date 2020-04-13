@@ -13,6 +13,99 @@
       <input type="text" id="name" placeholder="Engineering?" />
       <input type="submit" />
     </form>
+
+    <div class="container">
+      <canvas id="bubble" style="transform: rotate(180deg);"></canvas>
+      <script>
+        // Set up canvas
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        var canvas = document.getElementById("bubble");
+        var ctx = canvas.getContext("2d");
+
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        var bars = [],
+          numberOfBars = canvas.width / 20.5,
+          sortSpeed = 100;
+
+        // Push bars to array
+
+        for (var i = 0; i < numberOfBars; i++) {
+          bars.push({
+            x: i * 20.2, // space between bars
+            y: 0,
+            w: 15,
+            h: Math.floor(Math.random() * (canvas.height - 100) + 20), // generate random height for bars
+            color: "#2f2f2f",
+          });
+        }
+
+        // Draw all the bars by looping through them
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          for (var i = 0, x = bars.length; i < x; i++) {
+            var b = bars[i];
+
+            ctx.fillStyle = b.color;
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(b.x, b.y, b.w, b.h);
+          }
+        }
+
+        // Sort all the bars
+
+        function sort(i, j) {
+          draw();
+
+          if (bars[i].h > bars[0].h) {
+            var b = bars[i].h;
+            bars[i].h = bars[0].h;
+            bars[0].h = b;
+            setTimeout(function() {
+              sort(i - 1, j - 1);
+            }, 0.001);
+          }
+
+          try {
+            if (bars[i].h < bars[j].h) {
+              var b = bars[i].h;
+              bars[i].h = bars[j].h;
+              bars[j].h = b;
+              setTimeout(function() {
+                sort(i - 1, j - 1);
+              }, sortSpeed);
+            }
+          } catch (err) {
+            return false;
+          }
+
+          if (j === bars.length - 1) {
+            setTimeout(function() {
+              sort(bars.length * 0.5, bars.length * 0.5 + 1);
+            }, sortSpeed);
+          }
+
+          setTimeout(function() {
+            sort(i + 1, j + 1);
+          }, sortSpeed);
+        }
+
+        // Start everything up
+
+        sort(0, 1);
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
+      </script>
+    </div>
+
     <!--
     Where is this public/bundle.js file coming from?
     It comes from our trusty friend, webpack.
