@@ -3,107 +3,123 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Code Chrysalis</title>
+    <title>Bubble Sort - Carlos Salazar - Code Chrysalis</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+    <script src="sketch.js"></script>
+    <script src="Sort.js"></script>
+    <link rel="stylesheet" type="text/css" href="./src/index.css" />
   </head>
 
-  <body>
-    <div id="title"></div>
-    <form>
-      <label for="name">Name</label>
-      <input type="text" id="name" placeholder="Engineering?" />
-      <input type="submit" />
-    </form>
+  <body class="parent">
+    <!-- Inserts Bubble Background -->
+    <script src="https://cdn.jsdelivr.net/npm/bubbly-bg@0.2.3/dist/bubbly-bg.js"></script>
+    <script>
+      bubbly();
+    </script>
 
+    <div id="title" style="visibility:hidden">
+      <form>
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Engineering?" />
+        <input type="submit" />
+      </form>
+    </div>
+
+    <!-- <div style="visibility:hidden"> -->
+    <audio controls autoplay>
+      <source
+        src="https://aws-bubble-sort-presentation-carlos.s3-ap-northeast-1.amazonaws.com/elements/BubbleSoundEffect.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+    <!-- </div> -->
+
+    <div class="bubblePNG" class="child">
+      <img
+        src="http://aws-bubble-sort-carlos.s3-website-ap-northeast-1.amazonaws.com/elements/BubbleSortFont.png"
+        height="300"
+        width="500"
+        alt="Header-Image"
+      />
+    </div>
+
+    <!-- <div class="header">
+	<h1>Bubble Sort Animation</h1>
+	<h3>Carlos Salazar</h3>
+</div> -->
+    <!-- 
     <div class="container">
-      <canvas id="bubble" style="transform: rotate(180deg);"></canvas>
+      <canvas id="bubble" style="transform: rotate(180deg);" ></canvas> -->
+
+    <div class="MyCanvas">
+      <canvas id="animationCanvas" width="800" height="600"></canvas>
       <script>
         // Set up canvas
+        console.log("TEST THIS IS THE SCRIPT RUNNING!!");
         ////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////
-        var canvas = document.getElementById("bubble");
-        var ctx = canvas.getContext("2d");
 
-        canvas.height = window.innerHeight;
-        canvas.width = window.innerWidth;
+        let arr = [];
+        let i = 0;
+        let j = 0;
 
-        var bars = [],
-          numberOfBars = canvas.width / 20.5,
-          sortSpeed = 100;
+        function setup() {
+          createCanvas(800, 600);
 
-        // Push bars to array
-
-        for (var i = 0; i < numberOfBars; i++) {
-          bars.push({
-            x: i * 20.2, // space between bars
-            y: 0,
-            w: 15,
-            h: Math.floor(Math.random() * (canvas.height - 100) + 20), // generate random height for bars
-            color: "#2f2f2f",
-          });
+          for (let i = 0; i < width / 8; i++) {
+            arr.push(random(height));
+          }
+          console.log("arr", arr);
         }
-
-        // Draw all the bars by looping through them
 
         function draw() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-          for (var i = 0, x = bars.length; i < x; i++) {
-            var b = bars[i];
-
-            ctx.fillStyle = b.color;
-            ctx.fillRect(b.x, b.y, b.w, b.h);
-
-            ctx.strokeStyle = "white";
-            ctx.strokeRect(b.x, b.y, b.w, b.h);
-          }
+          background(500);
+          Sort();
+          simulateSorting();
         }
-
-        // Sort all the bars
-
-        function sort(i, j) {
-          draw();
-
-          if (bars[i].h > bars[0].h) {
-            var b = bars[i].h;
-            bars[i].h = bars[0].h;
-            bars[0].h = b;
-            setTimeout(function() {
-              sort(i - 1, j - 1);
-            }, 0.001);
-          }
-
-          try {
-            if (bars[i].h < bars[j].h) {
-              var b = bars[i].h;
-              bars[i].h = bars[j].h;
-              bars[j].h = b;
-              setTimeout(function() {
-                sort(i - 1, j - 1);
-              }, sortSpeed);
+        //debugger;
+        function Sort() {
+          let noSwaps;
+          for (let k = 0; k < 25; k++) {
+            noSwaps = true;
+            if (i < arr.length) {
+              let temp = arr[j];
+              if (arr[j] > arr[j + 1]) {
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                noSwaps = false;
+              }
+              j++;
+              if (j >= arr.length - i - 1) {
+                j = 0;
+                i++;
+              }
+              if (noSwaps) break;
+            } else {
+              return arr;
+              //noLoop();
             }
-          } catch (err) {
-            return false;
           }
-
-          if (j === bars.length - 1) {
-            setTimeout(function() {
-              sort(bars.length * 0.5, bars.length * 0.5 + 1);
-            }, sortSpeed);
-          }
-
-          setTimeout(function() {
-            sort(i + 1, j + 1);
-          }, sortSpeed);
         }
 
-        // Start everything up
-
-        sort(0, 1);
+        function simulateSorting() {
+          for (let i = 0; i < arr.length; i++) {
+            stroke("magenta");
+            //fill(0);
+            rect(i * 8, height, 2, -arr[i], 20);
+            //fill(1);
+            //rect(i*8 , height, 8, -arr[i],20);
+          }
+        }
         ////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////
       </script>
+    </div>
+
+    <div class="buttonContainer">
+      <button class="myButton" onClick="window.location.reload();">
+        Sort!
+      </button>
     </div>
 
     <!--
